@@ -46,10 +46,24 @@ function requestBluetoothDevice() {
         then(device => {
           log('"' + device.name + '" bluetooth device selected');
           deviceCache = device;
+          deviceCache.addEventListener('gattserverdisconnected',
+            handleDisconnection);
   
           return deviceCache;
         });
   }
+
+// Обработчик разъединения
+function handleDisconnection(event) {
+  let device = event.target;
+
+  log('"' + device.name +
+      '" bluetooth device disconnected, trying to reconnect...');
+
+  connectDeviceAndCacheCharacteristic(device).
+      then(characteristic => startNotifications(characteristic)).
+      catch(error => log(error));
+}  
   
  // Подключение к определенному устройству, получение сервиса и характеристики
 function connectDeviceAndCacheCharacteristic(device) {
@@ -85,7 +99,10 @@ function startNotifications(characteristic) {
     return characteristic.startNotifications().
         then(() => {
           log('Notifications started');
+          characteristic.addEventListener('characteristicvaluechanged',
+            handleCharacteristicValueChanged);
         });
+        
   }
   
   // Вывод в терминал
@@ -96,10 +113,89 @@ function log(data, type = '') {
 
 // Отключиться от подключенного устройства
 function disconnect() {
-  //
+  if (deviceCache) {
+    log('Disconnecting from "' + deviceCache.name + '" bluetooth device...');
+    deviceCache.removeEventListener('gattserverdisconnected',
+        handleDisconnection);
+
+    if (deviceCache.gatt.connected) {
+      deviceCache.gatt.disconnect();
+      log('"' + deviceCache.name + '" bluetooth device disconnected');
+    }
+    else {
+      log('"' + deviceCache.name +
+          '" bluetooth device is already disconnected');
+    }
+  }
+  if (characteristicCache) {
+    characteristicCache.removeEventListener('characteristicvaluechanged',
+        handleCharacteristicValueChanged);
+    characteristicCache = null;
+  }
+
+  deviceCache = null;
+}
+// Получение данных
+function handleCharacteristicValueChanged(event) {
+  let value = new TextDecoder().decode(event.target.value);
+  log(value, 'in');
+}
+// Промежуточный буфер для входящих данных
+let readBuffer = '';
+
+// Получение данных
+function handleCharacteristicValueChanged(event) {
+  let value = new TextDecoder().decode(event.target.value);
+
+  for (let c of value) {
+    if (c === '\n') {
+      let data = readBuffer.trim();
+      readBuffer = '';
+
+      if (data) {
+        receive(data);
+      }
+    }
+    else {
+      readBuffer += c;
+    }
+  }
+}
+
+// Обработка полученных данных
+function receive(data) {
+  log(data, 'in');
 }
 
 // Отправить данные подключенному устройству
 function send(data) {
-  //
+  data = String(data);
+
+  if (!data || !characteristicCache) {
+    return;
+  }
+
+  data += '\n';
+
+  if (data.length > 20) {
+    let chunks = data.match(/(.|[\r\n]){1,20}/g);
+
+    writeToCharacteristic(characteristicCache, chunks[0]);
+
+    for (let i = 1; i < chunks.length; i++) {
+      setTimeout(() => {
+        writeToCharacteristic(characteristicCache, chunks[i]);
+      }, i * 100);
+    }
+  }
+  else {
+    writeToCharacteristic(characteristicCache, data);
+  }
+
+  log(data, 'out');
+}
+
+// Записать значение в характеристику
+function writeToCharacteristic(characteristic, data) {
+  characteristic.writeValue(new TextEncoder().encode(data));
 }
