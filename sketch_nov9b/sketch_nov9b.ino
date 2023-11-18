@@ -1,9 +1,3 @@
-#include <Adafruit_GFX.h>
-#include <Adafruit_GrayOLED.h>
-#include <Adafruit_SPITFT.h>
-#include <Adafruit_SPITFT_Macros.h>
-#include <gfxfont.h>
-
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -17,17 +11,16 @@ SoftwareSerial Bluetooth(2, 3); //RX >> D3, TX >> D2
 String BluetoothReceived;
 
 void setup() {
-  display.cp437(true);
-  display.dim(true);
   Serial.begin(9600);
   Bluetooth.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.dim(true);
+  display.cp437(true);
   display.display();
   delay(2000);
 }
 
-String utf8rus(String source)
-{
+String utf8rus(String source) {
   int i,k;
   String target;
   unsigned char n;
@@ -53,18 +46,19 @@ String utf8rus(String source)
     }
     m[0] = n; target = target + String(m);
   }
-return target;
+  return target;
 }
 
 void loop() {
   if (Bluetooth.available() > 0) {
+    BluetoothReceived = Bluetooth.readString();
     Serial.print("Bluetooth Connected");
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(WHITE);
     display.setCursor(0, 5);
     display.setTextWrap(true);
-    display.print(utf8rus(Bluetooth.readString()));
+    display.print(utf8rus(BluetoothReceived));
     display.display();
     delay(2000);
   }
