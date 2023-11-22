@@ -2,7 +2,6 @@
     "orientation": "any",
     "name": "BLE module",
     "short_name": "BLE module",
-    "prefer_related_applications": false,
     "icons": [
         {
             "src": "./icons/android-chrome-36x36.png",
@@ -42,7 +41,8 @@
         {
             "src": "./icons/android-chrome-512x512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "theme_color": "#ffffff",
