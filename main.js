@@ -1,4 +1,5 @@
 // Получение ссылок на элементы UI
+let isFirstUse = true;
 let connectButton = document.getElementById('connect');
 let disconnectButton = document.getElementById('disconnect');
 let terminalContainer = document.getElementById('terminal');
@@ -10,6 +11,26 @@ let deviceCache = null;
 let characteristicCache = null;
 let installPrompt = null;
 const installButton = document.getElementById("install-button");
+const aboutDialog = document.getElementById("about-dialog");
+
+const isSidebarPWA = (() => {
+  if (navigator.userAgentData) {
+    return navigator.userAgentData.brands.some(b => {
+      return b.brand === "Edge Side Panel";
+    });
+  }
+
+  return false;
+})();
+
+// Whether we are running as an installed PWA or not.
+const isInstalledPWA = window.matchMedia('(display-mode: window-controls-overlay)').matches ||
+                       window.matchMedia('(display-mode: standalone)').matches;
+
+if (wasStoreEmpty && isFirstUse && !isInstalledPWA && !isSidebarPWA) {
+    aboutDialog.showModal();
+    isFirstUse = false;
+  }
 
 if (!isInstalledPWA && !isSidebarPWA) {
   window.addEventListener('beforeinstallprompt', e => {
