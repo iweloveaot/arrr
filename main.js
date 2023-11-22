@@ -9,14 +9,27 @@ let deviceCache = null;
 // Кэш объекта характеристики
 let characteristicCache = null;
 let installPrompt = null;
-const installButton = document.querySelector("#install");
+const installButton = document.getElementById("install-button");
 
-window.addEventListener("beforeinstallprompt", (event) => {
-  event.preventDefault();
-  installPrompt = event;
-  installButton.removeAttribute("hidden");
+if (!isInstalledPWA && !isSidebarPWA) {
+  window.addEventListener('beforeinstallprompt', e => {
+    // Don't let the default prompt go.
+    e.preventDefault();
+
+    // Instead, wait for the user to click the install button.
+    aboutDialog.addEventListener('close', () => {
+      if (aboutDialog.returnValue === "install") {
+        e.prompt();
+      }
+    });
+  });
+} else {
+  installButton.disabled = true;
+}
+
+addEventListener('appinstalled', () => {
+  aboutDialog.close();
 });
-
 
 // Подключение к устройству при нажатии на кнопку Connect
 connectButton.addEventListener('click', function() {

@@ -13,7 +13,6 @@
         <meta name="theme-color" content="#ffffff">
     </head>
         <body>
-        <button id="install" hidden>Install</button>
         <button id="connect" type="button">Connect</button>
 
         <button id="disconnect" type="button">Disconnect</button>
@@ -28,6 +27,20 @@
             <input id="input" type="text">
             <button type="submit">Send</button>
         </form>
+        <dialog id="about-dialog">
+            <div class="screenshot"></div>
+            <img class="logo" src=".icons/android-chrome-192x192.png" alt="The BLE-app logo" />
+            <section class="about">
+              <h1>BLE-app</h1>
+              <p>
+                Окунитесь в дополненную реальность, подключайтесь к нашим очкам
+              </p>
+            </section>
+            <form class="actions" method="dialog">
+                <button value="cancel">Close</button>
+                <button value="install" id="install-button">Install app</button>
+            </form>
+        </dialog>
 
         <script src="main.js"></script>
         <script src="companion.js" data-service-worker="sw.js"></script>
