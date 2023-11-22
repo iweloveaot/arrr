@@ -1,4 +1,4 @@
-importScripts('js/sw-toolbox.js');
+importScripts('sw-toolbox.js');
 
 toolbox.precache([
   'styles.css',
