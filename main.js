@@ -27,7 +27,7 @@ const isSidebarPWA = (() => {
 const isInstalledPWA = window.matchMedia('(display-mode: window-controls-overlay)').matches ||
                        window.matchMedia('(display-mode: standalone)').matches;
 
-if (wasStoreEmpty && isFirstUse && !isInstalledPWA && !isSidebarPWA) {
+if (isFirstUse && !isInstalledPWA && !isSidebarPWA) {
     aboutDialog.showModal();
     isFirstUse = false;
   }
