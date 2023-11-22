@@ -8,6 +8,15 @@ let inputField = document.getElementById('input');
 let deviceCache = null;
 // Кэш объекта характеристики
 let characteristicCache = null;
+let installPrompt = null;
+const installButton = document.querySelector("#install");
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  installPrompt = event;
+  installButton.removeAttribute("hidden");
+});
+
 
 // Подключение к устройству при нажатии на кнопку Connect
 connectButton.addEventListener('click', function() {
@@ -39,7 +48,7 @@ function connect() {
 // Запрос выбора Bluetooth устройства
 function requestBluetoothDevice() {
     log('Requesting bluetooth device...');
-  
+
     return navigator.bluetooth.requestDevice({
       filters: [{services: [0xFFE0]}],
     }).
@@ -48,7 +57,7 @@ function requestBluetoothDevice() {
           deviceCache = device;
           deviceCache.addEventListener('gattserverdisconnected',
             handleDisconnection);
-  
+
           return deviceCache;
         });
   }
@@ -63,48 +72,48 @@ function handleDisconnection(event) {
     connectDeviceAndCacheCharacteristic(device).
         then(characteristic => startNotifications(characteristic)).
         catch(error => log(error));
-}  
-  
+}
+
  // Подключение к определенному устройству, получение сервиса и характеристики
 function connectDeviceAndCacheCharacteristic(device) {
     if (device.gatt.connected && characteristicCache) {
       return Promise.resolve(characteristicCache);
     }
-  
+
     log('Connecting to GATT server...');
-  
+
     return device.gatt.connect().
         then(server => {
           log('GATT server connected, getting service...');
-  
+
           return server.getPrimaryService(0xFFE0);
         }).
         then(service => {
           log('Service found, getting characteristic...');
-  
+
           return service.getCharacteristic(0xFFE1);
         }).
         then(characteristic => {
           log('Characteristic found');
           characteristicCache = characteristic;
-  
+
           return characteristicCache;
         });
   }
-  
+
   // Включение получения уведомлений об изменении характеристики
 function startNotifications(characteristic) {
     log('Starting notifications...');
-  
+
     return characteristic.startNotifications().
         then(() => {
           log('Notifications started');
           characteristic.addEventListener('characteristicvaluechanged',
             handleCharacteristicValueChanged);
         });
-        
+
   }
-  
+
   // Вывод в терминал
 function log(data, type = '') {
     terminalContainer.insertAdjacentHTML('beforeend',
