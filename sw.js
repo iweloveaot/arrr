@@ -1,2 +1,13 @@
-‘use strict’;
-importScripts(‘sw-toolbox.js’); toolbox.precache([“index.html”,”style/style.css”]); toolbox.router.get(‘/images/*’, toolbox.cacheFirst); toolbox.router.get(‘/*’, toolbox.networkFirst, { networkTimeoutSeconds: 5});
+importScripts('js/sw-toolbox.js');
+
+toolbox.precache([
+  'styles.css',
+  'companion.js',
+  'main.js',
+  'index.html',
+]);
+
+toolbox.router.default = toolbox.networkFirst;
+toolbox.options.networkTimeoutSeconds = 5;
+
+toolbox.router.get('icons/*', toolbox.fastest);
