@@ -179,12 +179,6 @@ function disconnect() {
     deviceCache = null;
 }
 
-// Получение данных
-function handleCharacteristicValueChanged(event) {
-    let value = new TextDecoder().decode(event.target.value);
-    log(value, 'in');
-}
-
 // Промежуточный буфер для входящих данных
 let readBuffer = '';
 
