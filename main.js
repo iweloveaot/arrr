@@ -1,12 +1,14 @@
-// Получение ссылок на элементы UI
+// Получение ссылок на элементы UI, обработчики на клик по кнопкам
 let isFirstUse = true;
 let connectButton = document.getElementById('connect');
 let disconnectButton = document.getElementById('disconnect');
 let terminalContainer = document.getElementById('terminal');
 let sendForm = document.getElementById('send-form');
 let inputField = document.getElementById('input');
-// Кэш объекта выбранного устройства
+
+// Кэш объекта выбранного устройства (выбор BT05)
 let deviceCache = null;
+
 // Кэш объекта характеристики
 let characteristicCache = null;
 let installPrompt = null;
@@ -72,6 +74,7 @@ sendForm.addEventListener('submit', function(event) {
 
 // Запустить выбор Bluetooth устройства и подключиться к выбранному
 function connect() {
+    // Promise - объект, представляющий результат успешного/неудачного завершения асинхронной операции
     return (deviceCache ? Promise.resolve(deviceCache) :
         requestBluetoothDevice()).
         then(device => connectDeviceAndCacheCharacteristic(device)).
@@ -188,7 +191,7 @@ function handleCharacteristicValueChanged(event) {
 
   for (let c of value) {
     if (c === '\n') {
-      let data = readBuffer.trim();
+      let data = readBuffer.trim(); // trim() - удаление пробельных (пробелы, tab, конец строки и т.д.) символов
       readBuffer = '';
 
       if (data) {
@@ -216,8 +219,9 @@ function send(data) {
 
   data += '\n';
 
-  if (data.length > 20) {
-    let chunks = data.match(/(.|[\r\n]){1,20}/g);
+  if (data.length > 10) {
+    // match() возвращает получившиеся совпадения при сопоставлении строки с регулярным выражением
+    let chunks = data.match(/(.|[\r\n]){1,10}/g);
 
     writeToCharacteristic(characteristicCache, chunks[0]);
 
