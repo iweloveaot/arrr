@@ -29,11 +29,10 @@
 .round {
   display: block;
   position: absolute;
+  width: 50%;
   height: 5%;
-  width: 20%;
-  padding: 0.5% 1%;
-  margin-bottom: 0.5%;
-  margin-top: 0.5%;
+  padding: 1.5% 2%;
+  margin-bottom: 2%;
   background-color: #ffffff;
   overflow: auto;
   text-align: left;
