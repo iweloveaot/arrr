@@ -30,9 +30,10 @@
   display: block;
   position: absolute;
   height: 5%;
-  width: 50%;
+  width: 30%;
   padding: 1.5% 2%;
   margin-top: 0.1%;
+  margin-right: 10%;
   border: 2px solid #000000;
   border-radius: 10px;
   background-color: #ffffff;
