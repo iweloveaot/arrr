@@ -14,21 +14,6 @@
   padding-bottom: 3px;
 }
 
-.round {
-  float: left;
-  display: block;
-  position: absolute;
-  height: 10%;
-  width: 20%;
-  margin-right: 20%;
-  padding-left: 0.5%;
-  background-color: #ffffff;
-  overflow: auto;
-  text-align: left;
-  border: 2px solid #000000;
-  border-radius: 10px;
-}
-
 .container {
   background-color: #f1f1f1;
   padding-left: 5%;
@@ -41,12 +26,25 @@
 	font-family: sans-serif;
 }
 
-input[type=text] {
-  float: left;
-  width: 50%;
+.round {
+  display: block;
+  position: absolute;
+  height: 10%;
+  width: 20%;
+  padding-left: 0.5%;
+  background-color: #ffffff;
+  overflow: auto;
+  text-align: left;
+  border: 2px solid #000000;
+  border-radius: 10px;
+}
+
+.pole {
+  display: block;
+  width: 30%;
   padding: 2%;
-  margin-bottom: 5%;
-  margin-left: 45%;
+  margin-bottom: 2%;
+  margin-top: 10%;
   border-radius: 10px;
 }
 
@@ -60,22 +58,12 @@ button[type=submit] {
   border-radius: 10px;
 }
 
-.bconnect {
+.bconnect, .bdisconnect {
+  display: block;
   background-color: #f1f1f1;
   color: black;
   padding: 10px 15px;
-  margin-right: 2%;
   margin-bottom: 2%;
-  cursor: pointer;
-  width: 20%;
-  opacity: 0.9;
-  border-radius: 10px;
-}
-
-.bdisconnect {
-  background-color: #f1f1f1;
-  color: black;
-  padding: 10px 15px;
   cursor: pointer;
   width: 20%;
   opacity: 0.9;
