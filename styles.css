@@ -11,7 +11,7 @@
 }
 
 .h1 {
-  margin-bottom: 3px;
+  padding-bottom: 3px;
 }
 
 .round {
@@ -26,16 +26,14 @@
 
 .container {
   background-color: #f1f1f1;
-  padding-left: 8%;
-  padding-right: 8%;
+  padding-left: 5%;
+  padding-right: 5%;
 	border: 2px solid #f1f1f1;
-	margin-left: 30%;
-	margin-right: 30%;
-	margin-top: 10%;
-	border-radius: 5px;
+	margin-left: 10%;
+	margin-right: 10%;
+	border-radius: 10px;
 	color: #000000;
 	font-family: sans-serif;
-	text-align: center;
 }
 
 input[type=text] {
@@ -46,11 +44,33 @@ input[type=text] {
 }
 
 button[type=submit] {
-  background-color: #4CAF50;
+  background-color: #f1f1f1;
   color: white;
   padding: 16px 20px;
   margin: 8px 0;
   cursor: pointer;
   width: 30%;
   opacity: 0.9;
+}
+
+.connect {
+  background-color: #f1f1f1;
+  color: black;
+  padding: 10px 15px;
+  margin: 10px 10% 10px 2%;
+  cursor: pointer;
+  width: 40%;
+  opacity: 0.9;
+  border-radius: 10px;
+}
+
+.disconnect {
+  background-color: #f1f1f1;
+  color: black;
+  padding: 10px 15px;
+  margin: 10px 10%;
+  cursor: pointer;
+  width: 40%;
+  opacity: 0.9;
+  border-radius: 10px;
 }
