@@ -3,11 +3,11 @@
 }
 
 #terminal div.out {
-    color: red;
+    color: black;
 }
 
 #terminal div.in {
-    color: blue;
+    color: black;
 }
 
 .h1 {

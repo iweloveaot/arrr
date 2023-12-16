@@ -84,13 +84,13 @@ function connect() {
 
 // Запрос выбора Bluetooth устройства
 function requestBluetoothDevice() {
-    log('Запрос Bluetooth-устройства');
+    log('Request Bluetooth device');
 
     return navigator.bluetooth.requestDevice({
       filters: [{services: [0xFFE0]}],
     }).
         then(device => {
-          log('Выбрано Bluetooth-устройство "' + device.name + '"');
+          log('The Bluetooth device "' + device.name + '" selected');
           deviceCache = device;
           deviceCache.addEventListener('gattserverdisconnected',
             handleDisconnection);
@@ -103,8 +103,8 @@ function requestBluetoothDevice() {
 function handleDisconnection(event) {
     let device = event.target;
 
-    log('Bluetooth-устройство "' + device.name +
-        '" отключено, попытка повторного подключения...');
+    log('Bluetooth device "' + device.name +
+        '" disconnected, trying to reconnect...');
 
     connectDeviceAndCacheCharacteristic(device).
         then(characteristic => startNotifications(characteristic)).
@@ -117,21 +117,21 @@ function connectDeviceAndCacheCharacteristic(device) {
       return Promise.resolve(characteristicCache);
     }
 
-    log('Подключение к серверу с характеристиками подключения ...');
+    log('Connecting to a server with connection characteristics...');
 
     return device.gatt.connect().
         then(server => {
-          log('Сервер подключен, поиск сервиса характеристик...');
+          log('Server connected, searching for service characteristics...');
 
           return server.getPrimaryService(0xFFE0);
         }).
         then(service => {
-          log('Сервис найден, получение характеристик...');
+          log('Service found, getting characteristics...');
 
           return service.getCharacteristic(0xFFE1);
         }).
         then(characteristic => {
-          log('Характеристики получены');
+          log('Characteristics received');
           characteristicCache = characteristic;
 
           return characteristicCache;
@@ -140,11 +140,11 @@ function connectDeviceAndCacheCharacteristic(device) {
 
   // Включение получения уведомлений об изменении характеристики
 function startNotifications(characteristic) {
-    log('Запуск оповещения о получении сообщений');
+    log('Trigger a message notification');
 
     return characteristic.startNotifications().
         then(() => {
-          log('Оповещения запущены');
+          log('Alerts started');
           characteristic.addEventListener('characteristicvaluechanged',
             handleCharacteristicValueChanged);
         });
@@ -160,17 +160,17 @@ function log(data, type = '') {
 // Отключиться от подключенного устройства
 function disconnect() {
     if (deviceCache) {
-      log('Отключение от Bluetooth-устройства "' + deviceCache.name + '"');
+      log('Disconnecting from a Bluetooth device "' + deviceCache.name + '"');
       deviceCache.removeEventListener('gattserverdisconnected',
           handleDisconnection);
 
       if (deviceCache.gatt.connected) {
         deviceCache.gatt.disconnect();
-        log('Bluetooth-устройство "' + deviceCache.name + '" отключено');
+        log('Bluetooth device "' + deviceCache.name + '" disconnected');
       }
       else {
-        log('Bluetooth-устройство "' + deviceCache.name +
-            '" уже отключено');
+        log('Bluetooth device "' + deviceCache.name +
+            '" already disconnected');
       }
     }
     if (characteristicCache) {
