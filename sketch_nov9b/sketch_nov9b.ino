@@ -3,7 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 //#include <Fonts/FreeSerif9pt7b.h>
-#include <SoftwareSerial.h>
+// #include <SoftwareSerial.h>
 
 #define OLED_RESET 4
 Adafruit_SSD1306 display(OLED_RESET);
@@ -11,13 +11,13 @@ Adafruit_SSD1306 display(OLED_RESET);
 // #define screen_height 64 // OLED display height, in pixels
 // Adafruit_SSD1306 display(screen_width, screen_height);
 
-SoftwareSerial Bluetooth(2, 3); //RX >> D3, TX >> D2
+// SoftwareSerial Bluetooth(2, 3); //RX >> D3, TX >> D2
 String BluetoothReceived;
 
 
 void setup() {
   Serial.begin(9600);
-  Bluetooth.begin(9600);
+  Serial1.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.cp437(true);
   display.clearDisplay();
@@ -63,8 +63,8 @@ return target;
 
 
 void loop() {
-  if (Bluetooth.available() > 0) {
-    BluetoothReceived = utf8rus(Bluetooth.readString());
+  if (Serial1.available() > 0) {
+    BluetoothReceived = utf8rus(Serial1.readString());
     int n = (BluetoothReceived.length() / 21) + 1;
     delay(3000);
     // display.setCursor(0, 0);
@@ -79,6 +79,6 @@ void loop() {
     }
   }
   display.setCursor(0, 0);
-  display.println("Ready for next message");
+  display.println("Ready for message");
   display.display();
 }
